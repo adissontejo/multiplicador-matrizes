@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void geraMatriz(int n, int m, char* nomeArquivo) {
+void gera_matriz(int n, int m, char* nomeArquivo) {
     FILE* arquivo = fopen(nomeArquivo, "w");
 
     fprintf(arquivo, "%d %d\n", n, m);
@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
     int n2 = atoi(argv[3]);
     int m2 = atoi(argv[4]);
 
-    geraMatriz(n1, m1, "./in/A.txt");
-    geraMatriz(n2, m2, "./in/B.txt");
+    gera_matriz(n1, m1, "./in/A.txt");
+    gera_matriz(n2, m2, "./in/B.txt");
 
     return 0;
 }
