@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
     int n2 = atoi(argv[3]);
     int m2 = atoi(argv[4]);
 
-    gera_matriz(n1, m1, "./in/A.txt");
-    gera_matriz(n2, m2, "./in/B.txt");
+    gera_matriz(n1, m1, "./input/A.txt");
+    gera_matriz(n2, m2, "./input/B.txt");
 
     return 0;
 }
