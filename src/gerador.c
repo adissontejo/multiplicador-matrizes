@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void gera_matriz(int n, int m, char* nomeArquivo) {
-    FILE* arquivo = fopen(nomeArquivo, "w");
+void gera_matriz(int n, int m, char* caminho_arquivo) {
+    FILE* arquivo = fopen(caminho_arquivo, "w");
 
     fprintf(arquivo, "%d %d\n", n, m);
 

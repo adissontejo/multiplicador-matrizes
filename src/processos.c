@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <syscall.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/shm.h>
@@ -10,16 +11,17 @@
 int n1, m1, n2, m2; // n1,n2 -> numero de linhas | m1,m2 -> numero de colunas
 int p; // -> numero de elementos por processo
 int segmento1, segmento2; // -> segmentos das memorias compartilhadas
+struct timeval tempo_ini;
 
-int acessa_matriz(int* matriz, int i, int j, int n, int m) { 
+int acessa_matriz(int* matriz, int i, int j, int n, int m) {
     // i, j -> posicoes de uma matriz lin e col | n,m numero de linhas e colunas da matriz
     int el = i * m + j;
 
     return matriz[el];
 }
 
-int le_matriz(int* n, int* m, char* nomeArquivo) {
-    FILE* arquivo = fopen(nomeArquivo, "r");
+int le_matriz(int* n, int* m, char* caminho_arquivo) {
+    FILE* arquivo = fopen(caminho_arquivo, "r");
 
     fscanf(arquivo, "%d %d", n, m);
 
@@ -65,13 +67,15 @@ void calcula_elementos(int id_processo) {
 
     FILE* arquivo = fopen(caminho_arquivo, "w");
 
+    fprintf(arquivo, "%d %d %d\n", n1, m2, fim - ini);
+
     for (int i = ini; i < fim; i++) {
         int linha = i / m2;
         int coluna = i % m2;
 
         if (coluna) {
             fprintf(arquivo, " ");
-        } 
+        }
 
         int soma = 0;
 
@@ -89,17 +93,25 @@ void calcula_elementos(int id_processo) {
         }
     }
 
-    fclose(arquivo);
-
     shmdt(matriz1);
     shmdt(matriz2);
+
+    struct timeval tempo_fim, diff;
+
+    gettimeofday(&tempo_fim, NULL);
+
+    timersub(&tempo_fim, &tempo_ini, &diff);
+
+    fprintf(arquivo, "\n%ld.%06ld segundos\n", diff.tv_sec, diff.tv_usec);
+
+    fclose(arquivo);
 }
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("Uso: %s <numero_de_elementos_por_processo>\n", argv[0]);
 
-        return 0;
+        exit(0);
     }
 
     p = atoi(argv[1]);
@@ -113,12 +125,14 @@ int main(int argc, char *argv[]) {
         limpa_matriz(segmento1);
         limpa_matriz(segmento2);
 
-        return 0;
+        exit(0);
     }
 
     int total_processos = ceil((double) n1 * m2 / p);
 
     int id = -1, pid[total_processos];
+
+    gettimeofday(&tempo_ini, NULL);
 
     for (int i = 0; i < total_processos; i++) {
         pid[i] = fork();
@@ -131,11 +145,15 @@ int main(int argc, char *argv[]) {
         // fazer else if < 0 - erros
     }
 
-    if (id == -1) {
-        for (int i = 0; i < total_processos; i++) {
-            waitpid(pid[i], NULL, 0);
-        }
-    } else {
+    if (id != -1) {
         calcula_elementos(id);
+
+        exit(0);
     }
+
+    for (int i = 0; i < total_processos; i++) {
+        waitpid(pid[i], NULL, 0);
+    }
+
+    return 0;
 }
