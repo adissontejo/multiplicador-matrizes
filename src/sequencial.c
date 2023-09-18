@@ -3,6 +3,7 @@
 #include <sys/time.h>
 
 int n1, m1, n2, m2; // n1,n2 -> numero de linhas | m1,m2 -> numero de colunas
+int* matriz1, * matriz2;
 struct timeval tempo_ini;
 
 int acessa_matriz(int* matriz, int i, int j, int n, int m) {
@@ -34,10 +35,6 @@ int * le_matriz(int* n, int* m, char* caminho_arquivo) {
 }
 
 void calcula_elementos() {
-
-    int* matriz1 = le_matriz(&n1, &m1, "./input/A.txt");
-    int* matriz2 = le_matriz(&n2, &m2, "./input/B.txt");
-
     char caminho_arquivo[255];
 
     sprintf(caminho_arquivo, "./output/sequencial/saida.txt");
@@ -62,18 +59,23 @@ void calcula_elementos() {
         fprintf(arquivo, "%d.%d %d\n", (linha + 1), (coluna + 1), soma);
     }
 
+    free(matriz1);
+    free(matriz2);
+
     struct timeval tempo_fim, diff;
 
     gettimeofday(&tempo_fim, NULL);
 
     timersub(&tempo_fim, &tempo_ini, &diff);
 
-    fprintf(arquivo, "\n%ld.%06ld segundos\n", diff.tv_sec, diff.tv_usec);
+    fprintf(arquivo, "%ld.%06ld segundos\n", diff.tv_sec, diff.tv_usec);
 
     fclose(arquivo);
 }
 
 int main(int argc, char *argv[]) {
+    matriz1 = le_matriz(&n1, &m1, "./input/A.txt");
+    matriz2 = le_matriz(&n2, &m2, "./input/B.txt");
 
     if (m1 != n2) {
         printf("Matrizes incompatíveis\n");
