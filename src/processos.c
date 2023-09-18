@@ -94,7 +94,7 @@ void calcula_elementos(int id_processo) {
 
     timersub(&tempo_fim, &tempo_ini, &diff);
 
-    fprintf(arquivo, "\n%ld.%06ld segundos\n", diff.tv_sec, diff.tv_usec);
+    fprintf(arquivo, "%ld.%06ld segundos\n", diff.tv_sec, diff.tv_usec);
 
     fclose(arquivo);
 }

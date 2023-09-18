@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void formata(char* caminho_pasta) {
-    char caminho_arquivo_leitura[255], caminho_arquivo_escrita[255];
+    char caminho_arquivo_leitura[255], caminho_arquivo_escrita[255], temp[50];
 
     sprintf(caminho_arquivo_leitura, "%s/saida_0.txt", caminho_pasta);
     sprintf(caminho_arquivo_escrita, "%s/saida.txt", caminho_pasta);
@@ -28,7 +28,7 @@ void formata(char* caminho_pasta) {
         }
 
         for (int i = 0; i < p; i++) {
-            fscanf(arquivo_leitura, "%d", &matriz[cont]);
+            fscanf(arquivo_leitura, "%s %d", temp, &matriz[cont]);
 
             cont++;
         }
@@ -45,15 +45,9 @@ void formata(char* caminho_pasta) {
     }
 
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m - 1; j++) {
-            if (j) {
-                fprintf(arquivo_escrita, " ");
-            }
-
-            fprintf(arquivo_escrita, "%d", matriz[i * m + j]);
+        for (int j = 0; j < m; j++) {
+            fprintf(arquivo_escrita, "%d.%d %d\n", i + 1, j + 1, matriz[i * m + j]);
         }
-
-        fprintf(arquivo_escrita, "\n");
     }
 
     fprintf(arquivo_escrita, "%lf segundos\n", maior_tempo);
