@@ -73,10 +73,6 @@ void calcula_elementos(int id_processo) {
         int linha = i / m2;
         int coluna = i % m2;
 
-        if (coluna) {
-            fprintf(arquivo, " ");
-        }
-
         int soma = 0;
 
         for (int j = 0; j < m1; j++) {
@@ -86,11 +82,7 @@ void calcula_elementos(int id_processo) {
             soma += a * b;
         }
 
-        fprintf(arquivo, "%d", soma);
-
-        if (coluna == m2 - 1) {
-            fprintf(arquivo, "\n");
-        }
+        fprintf(arquivo, "%d.%d %d\n", (linha + 1), (coluna + 1), soma);
     }
 
     shmdt(matriz1);
