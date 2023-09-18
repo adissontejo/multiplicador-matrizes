@@ -1,5 +1,5 @@
 .PHONY: all
-all: bin/gerador bin/formatador bin/processos bin/sequencial
+all: bin/gerador bin/formatador bin/processos bin/sequencial bin/threads
 
 bin/gerador: bin src/gerador.c
 	gcc -o bin/gerador src/gerador.c
@@ -12,6 +12,9 @@ bin/processos: bin src/processos.c
 
 bin/sequencial: bin src/sequencial.c
 	gcc -o bin/sequencial src/sequencial.c -lm
+
+bin/threads: bin src/threads.c
+	gcc -o bin/threads src/threads.c -lm
 
 bin:
 	mkdir bin
