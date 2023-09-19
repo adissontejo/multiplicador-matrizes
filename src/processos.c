@@ -133,8 +133,11 @@ int main(int argc, char *argv[]) {
             id = i;
 
             break;
+        } else if (pid[i] == -1) {
+            printf("Erro ao criar processo. Tentando novamente...\n");
+
+            i--;
         }
-        // fazer else if < 0 - erros
     }
 
     if (id != -1) {

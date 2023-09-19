@@ -8,7 +8,7 @@
 #include <pthread.h>
 
 int n1, m1, n2, m2; // n1,n2 -> numero de linhas | m1,m2 -> numero de colunas
-int p; // -> numero de elementos por theard
+int p, * matriz1, * matriz2; // -> numero de elementos por theard
 struct timeval tempo_ini;
 pid_t pid;
 
@@ -41,16 +41,14 @@ int * le_matriz(int* n, int* m, char* caminho_arquivo) {
 }
 
 void * calcula_elementos(void * tid) {
-    printf("tid: %d", (int)(size_t) tid);
+    int thread_id = (int) (size_t) tid;
+
     int ini = p * ((int)(size_t) tid);
     int fim = p * ((int)(size_t) tid + 1);
 
     if (fim > n1 * m2) {
         fim = n1 * m2;
     }
-
-    int* matriz1 = le_matriz(&n1, &m1, "./input/A.txt");
-    int* matriz2 = le_matriz(&n2, &m2, "./input/B.txt");
 
     char caminho_arquivo[255];
 
@@ -63,7 +61,7 @@ void * calcula_elementos(void * tid) {
     for (int i = ini; i < fim; i++) {
         int linha = i / m2;
         int coluna = i % m2;
-        
+
         int soma = 0;
 
         for (int j = 0; j < m1; j++) {
@@ -91,35 +89,43 @@ void * calcula_elementos(void * tid) {
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        printf("Uso: %s <numero_de_elementos_por_processo>\n", argv[0]);
+        printf("Uso: %s <numero_de_elementos_por_thread>\n", argv[0]);
 
         exit(0);
     }
 
     p = atoi(argv[1]);
 
+    matriz1 = le_matriz(&n1, &m1, "./input/A.txt");
+    matriz2 = le_matriz(&n2, &m2, "./input/B.txt");
+
     if (m1 != n2) {
         printf("Matrizes incompatíveis\n");
+
+        free(matriz1);
+        free(matriz2);
+
         exit(0);
     }
 
     int total_threads = ceil((double) n1 * m2 / p);
 
     pthread_t threads[total_threads];
-    int i, status;
-    void* thread_retorno;
 
     gettimeofday(&tempo_ini, NULL);
 
-    pid = fork();
-    for (i = 0; i < total_threads; i++) {
-        status = pthread_create(&threads[i], NULL, calcula_elementos, (void*)(size_t) i);
+    for (int i = 0; i < total_threads; i++) {
+        int status = pthread_create(&threads[i], NULL, calcula_elementos, (void*)(size_t) i);
 
-        if(status != 0) return (1);
+        if(status != 0) {
+            printf("Erro ao criar thread. Tentando novamente...");
+
+            i--;
+        }
     }
 
-    for (i = 0; i < total_threads; i++) {
-        retorno = pthread_join(threads[i], &thread_retorno);
+    for (int i = 0; i < total_threads; i++) {
+        pthread_join(threads[i], NULL);
     }
 
     return 0;

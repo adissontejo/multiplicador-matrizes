@@ -14,7 +14,7 @@ bin/sequencial: bin src/sequencial.c
 	gcc -o bin/sequencial src/sequencial.c -lm
 
 bin/threads: bin src/threads.c
-	gcc -o bin/threads src/threads.c -lm
+	gcc -o bin/threads src/threads.c -lm -pthread
 
 bin:
 	mkdir bin

@@ -59,9 +59,6 @@ void calcula_elementos() {
         fprintf(arquivo, "%d.%d %d\n", (linha + 1), (coluna + 1), soma);
     }
 
-    free(matriz1);
-    free(matriz2);
-
     struct timeval tempo_fim, diff;
 
     gettimeofday(&tempo_fim, NULL);
@@ -79,10 +76,14 @@ int main(int argc, char *argv[]) {
 
     if (m1 != n2) {
         printf("Matrizes incompatíveis\n");
-    }else{
+    } else {
         gettimeofday(&tempo_ini, NULL);
+
         calcula_elementos();
     }
+
+    free(matriz1);
+    free(matriz2);
 
     return 0;
 }

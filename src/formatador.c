@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 void formata(char* caminho_pasta) {
     char caminho_arquivo_leitura[255], caminho_arquivo_escrita[255], temp[50];
@@ -55,9 +56,20 @@ void formata(char* caminho_pasta) {
     fclose(arquivo_escrita);
 }
 
-int main() {
-    formata("./output/processos");
-    formata("./output/threads");
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        printf("Uso: %s <processos | threads>\n", argv[0]);
+
+        return 0;
+    }
+
+    if (strcmp(argv[1], "processos") == 0) {
+        formata("./output/processos");
+    } else if (strcmp(argv[1], "threads") == 0) {
+        formata("./output/threads");
+    } else {
+        printf("Argumento inválido.\n");
+    }
 
     return 0;
 }

@@ -52,5 +52,6 @@ Mkfile.old
 dkms.conf
 
 bin
+tests
 input/*.txt
 output/**/*.txt
