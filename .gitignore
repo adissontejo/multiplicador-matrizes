@@ -53,5 +53,5 @@ dkms.conf
 
 bin
 tests
-input/*.txt
+input/**/*.txt
 output/**/*.txt

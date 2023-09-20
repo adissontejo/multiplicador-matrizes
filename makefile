@@ -28,7 +28,7 @@ bin_clean:
 
 .PHONY: in_clean
 in_clean:
-	rm -rf input/*.txt
+	find ./input -type f -name "*.txt" -delete
 
 .PHONY: out_clean
 out_clean:
