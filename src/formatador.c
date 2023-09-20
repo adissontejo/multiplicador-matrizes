@@ -17,8 +17,6 @@ void formata(char* caminho_pasta) {
 
     fprintf(arquivo_escrita, "%d %d\n", n, m);
 
-    int matriz[n * m];
-
     while (cont < n * m) {
         if (cont != 0) {
             sprintf(caminho_arquivo_leitura, "%s/saida_%d.txt", caminho_pasta, cont / p);
@@ -29,7 +27,11 @@ void formata(char* caminho_pasta) {
         }
 
         for (int i = 0; i < p; i++) {
-            fscanf(arquivo_leitura, "%s %d", temp, &matriz[cont]);
+            int el;
+
+            fscanf(arquivo_leitura, "%s %d", temp, &el);
+
+            fprintf(arquivo_escrita, "%s %d\n", temp, el);
 
             cont++;
         }
@@ -43,12 +45,6 @@ void formata(char* caminho_pasta) {
         }
 
         fclose(arquivo_leitura);
-    }
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            fprintf(arquivo_escrita, "%d.%d %d\n", i + 1, j + 1, matriz[i * m + j]);
-        }
     }
 
     fprintf(arquivo_escrita, "%lf segundos\n", maior_tempo);
