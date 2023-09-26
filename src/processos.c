@@ -46,10 +46,6 @@ int le_matriz(int* n, int* m, char* caminho_arquivo) {
     return segmento;
 }
 
-void limpa_matriz(int segmento) {
-    shmctl(segmento, IPC_RMID, NULL);
-}
-
 void calcula_elementos(int id_processo) {
     int ini = p * id_processo;
     int fim = p * (id_processo + 1);
@@ -114,8 +110,8 @@ int main(int argc, char *argv[]) {
     if (m1 != n2) {
         printf("Matrizes incompatíveis\n");
 
-        limpa_matriz(segmento1);
-        limpa_matriz(segmento2);
+        shmctl(segmento1, IPC_RMID, NULL);
+        shmctl(segmento2, IPC_RMID, NULL);
 
         exit(0);
     }
@@ -149,6 +145,9 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < total_processos; i++) {
         waitpid(pid[i], NULL, 0);
     }
+
+    shmctl(segmento1, IPC_RMID, NULL);
+    shmctl(segmento2, IPC_RMID, NULL);
 
     return 0;
 }

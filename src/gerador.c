@@ -22,7 +22,7 @@ void gera_matriz(int n, int m, char* caminho_arquivo) {
 
 int main(int argc, char *argv[]) {
     if (argc != 5 && argc != 6) {
-        printf("Uso: %s <numero_de_linhas_A> <numero_de_colunas_A> <numero_de_linhas_B> <numero_de_colunas_B> <randomizador_opcional>\n", argv[0]);
+        printf("Uso: %s <numero_de_linhas_A> <numero_de_colunas_A> <numero_de_linhas_B> <numero_de_colunas_B> [randomizador_opcional]\n", argv[0]);
 
         return 0;
     }

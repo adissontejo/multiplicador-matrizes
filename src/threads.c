@@ -128,5 +128,8 @@ int main(int argc, char *argv[]) {
         pthread_join(threads[i], NULL);
     }
 
+    free(matriz1);
+    free(matriz2);
+
     return 0;
 }
